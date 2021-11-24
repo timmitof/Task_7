@@ -6,19 +6,29 @@ import android.widget.Button
 import android.widget.TextView
 
 class SecondActivity : AppCompatActivity() {
-    lateinit var resultTextView: TextView
+    lateinit var tvText: TextView
     lateinit var backButton: Button
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
         
-        resultTextView = findViewById(R.id.tvText)
+        tvText = findViewById(R.id.textViewRes)
         backButton = findViewById(R.id.backBtn)
 
-        resultTextView.text = intent.getStringExtra("RESULTWHILE")
-        resultTextView.text = intent.getStringExtra("RESULTFOR")
+        val inWhile = intent.getStringExtra("TEXTWHILE")
+        val inFor = intent.getStringExtra("TEXT")
+        val inIndex = intent.getIntExtra("INDEX", 0)
 
+        if (inWhile != null) {
+            tvText.text = inWhile
+        }
+
+        else if (inFor != null && inIndex != null) {
+            val text = inFor
+            val index = inIndex
+            tvText.text = "Using 'for' - $text: $index"
+        }
 
         backButton.setOnClickListener {
             onBackPressed()

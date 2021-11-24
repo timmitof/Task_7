@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     lateinit var editText: EditText
@@ -25,25 +26,27 @@ class MainActivity : AppCompatActivity() {
             val text = editText.text.toString()
             val resultWhile = getValueUsingWhile(text)
             val intent = Intent(this, SecondActivity::class.java)
-            intent.putExtra("RESULTWHILE", resultWhile)
-            startActivity(intent)
+            if (resultWhile.isNullOrEmpty()) Toast.makeText(this, "Введите текст", Toast.LENGTH_SHORT).show()
+            else {
+                intent.putExtra("TEXTWHILE", resultWhile)
+                startActivity(intent)
+            }
         }
 
         buttonUsingFor.setOnClickListener {
             val text = editText.text.toString()
-            val resultFor = getValueUsingFor(text)
-
+            getValueUsingFor(text)
         }
     }
-
-
 
     fun getValueUsingWhile(text: String) : String? {
         var index = 0
 
         while (index < array.size){
             if (text == array[index]){
-                return "$text: $index"
+                return "Using 'while' - $text: $index"
+            } else if(text.isNullOrEmpty()) {
+                return null
             }
             ++index
         }
@@ -51,15 +54,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getValueUsingFor(text: String){
-        var intent = Intent(this, SecondActivity::class.java)
+        val intent = Intent(this, SecondActivity::class.java)
 
         for (item in array){
-            if (item == text){
-                val textRes = intent.putExtra("TEXT", text)
-                val indexRes = intent.putExtra("INDEX", array.indexOf(item))
-                val result = "$textRes: $indexRes"
-                intent.putExtra("RESULTFOR", result)
-                startActivity(intent)
+            if (item == text) {
+                intent.putExtra("TEXT", text)
+                intent.putExtra("INDEX", array.indexOf(item))
+                startActivity(intent)}
+
+            else if (text.isNullOrEmpty()){
+                Toast.makeText(this, "Введите текст", Toast.LENGTH_SHORT).show()
             }
         }
     }
